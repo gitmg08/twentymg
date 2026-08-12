@@ -1,5 +1,15 @@
 {
   "name": "twentymg",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
-  "postCreateCommand": "npm install -g @anthropic-ai/claude-code"
+  // Repo requires Node ^24.5.0 (see root package.json "engines"); Node 20
+  // fails yarn's post-install engine check.
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:24",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "containerEnv": {
+    // Prevents `yarn` from hanging on an interactive age-gate prompt in
+    // non-interactive shells (Codespaces creation, CI, agent tooling).
+    "YARN_ENABLE_HARDENED_MODE": "false"
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh"
 }
